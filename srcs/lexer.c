@@ -42,7 +42,7 @@ void	create_cmds(t_stack **node, char *token)
 	char	**words;
 	int		i;
 
-	printf("Linea a cortar en palabras: -%s-\n", token);
+	//token = expand_vble_lines(token, 0); //expandir $ de la linea antes de cortar en palabras?
 	words = ft_flag_split(token, ' ');
 	(*node)->pipe.arg = (char **)malloc(sizeof(char *) * (ft_str2len(words)) + 1);
 	if (!((*node)->pipe.arg))
@@ -53,8 +53,9 @@ void	create_cmds(t_stack **node, char *token)
 	while (words[i])
 	{
 		if(words[i][0] == '$')
+			printf(" palabra fltsplit %d %s\n", i, words[i]);
 			//words[i] = expand_vble_lines(words[i], 0);
-			words[i] = expand_vble_word(words[i], 0);
+			//words[i] = expand_vble_word(words[i], 0);
 			printf(" palabra %d %s\n", i, words[i]);
 		(*node)->pipe.arg[i - 1] = ft_strdup(words[i]);
 		i++;
