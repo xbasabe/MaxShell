@@ -89,7 +89,7 @@ void	exec_stack(t_stack *stack, char *input)
 		{
 			printf("exec_stack: skip. redirection\n");
 			//tmp = tmp->next;
-		}	
+		}
 		child_launch(input, tmp);
 		tmp = tmp->next;
 		i++;

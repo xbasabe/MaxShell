@@ -137,7 +137,6 @@ void ft_redir_forward(t_stack *stack) // >
 	//redireccionar la salida de comando que reciba e fichero y ejecuta
 	
 	read(tmp->pipe.p[0], text, 20);
-	
 	dup2(tmp->prev->pipe.p[1],fd);
 	write(tmp->prev->pipe.p[1], text, sizeof(char) * ft_strlen(text));
 	
@@ -183,29 +182,35 @@ void ft_redir_heredoc(t_stack *stack)
 {
 	t_stack	*tmp;
 	char 	*path;
+	char	*txt;
+	char	*limit;
 
 	tmp = stack;
 	path = NULL;
+	txt = NULL;
 	if(tmp->prev) 
 		dup2(tmp->prev->pipe.p[0], 0); //stdin
-	/*
-	while (env)
+	
+	limit = readline("heredoc$> ");
+	while (1)
 	{
-		readline?
+		if(strcmp(txt, limit) == 0)
+			break;
+		txt = readline("heredoc$> ");
 	}
-	*/
 	//redireccioar entrada del pr
 }
 
 void ft_redir_back(t_stack *stack) // <
 {
 	t_stack	*tmp;
-	int		fd;
-	char 	*path;
-	t_env	*env;
-	char *txt;
+	//int		fd;
+	//char 	*path;
+	//t_env	*env;
+	//char *txt;
 
 	tmp = stack;
+	/*
 	env = g_shell.env;
 	path = NULL;
 	txt = NULL;
@@ -222,6 +227,12 @@ void ft_redir_back(t_stack *stack) // <
 	path = ft_strjoin(path, "/");
 	path = ft_strjoin(path, tmp->pipe.cmd);
 	printf("Archivo ft_redir back %s\n", path);
+	*/
+	if(tmp->prev)
+		tmp->prev->pipe.arg[0] = tmp->pipe.cmd;
+	//dup2(tmp->prev->pipe.p[1],tmp->pipe.p[1]);
+	tmp->prev->next = tmp->next;
+	/*
 	fd = open(path, O_RDONLY | O_CREAT);
 	//redireccioar entrada del prev
 	if(tmp->prev) 
@@ -231,7 +242,9 @@ void ft_redir_back(t_stack *stack) // <
 		dup2(tmp->prev->pipe.p[1],tmp->pipe.p[0]);
 	read(fd, txt, 5);
 	write(tmp->pipe.p[1], txt, 5);
+	
 	close(fd);
+	*/
 }
 
 /*

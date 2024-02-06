@@ -26,7 +26,7 @@ SRCS		= main.c signals.c builtin.c parse.c exebash.c stack.c in_out.c cd.c execv
 
 # Compiler options
 CC			= gcc
-CFLAGS		= -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror #-g3 -fsanitize=address
 #DFLAG		= -lreadline
 F_READLINE	= -I$(READLINE_DIR)/include
 DFLAG		= -lreadline -L$(READLINE_DIR)/lib

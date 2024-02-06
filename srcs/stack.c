@@ -25,7 +25,6 @@ t_stack	*pipe_stack(char *input)
 	i = 0;
 	if (tokens[0] && str_cmp(tokens[0],"\0") != 0)
 	{
-		printf("stack linea antes de create comds: -%s-\n", tokens[i]);
 		stack = create_node(tokens[0]);
 		//input_to_lines(t_stack *node) //pasamos el nodo el le metemos la información sin devolver
 		create_cmds(&stack, tokens[0]);

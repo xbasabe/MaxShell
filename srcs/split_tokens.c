@@ -219,12 +219,16 @@ char *expand_vble_lines(char *txt, int init)
 	char *prev;
 	char *post;
 	char *temp;
+	int flag[2];
 
 	i = 0;
 	j = 0;
+	flag[0] = 1;
+	flag[1] = 1;
 	//post = (char *)malloc(sizeof(char) * 999);
 	post = NULL;
-	while (txt[i] != '$')
+	//while (txt[i] != '$')
+	while(expand_or_not('$', flag) == 0)
 		i++;
 	prev = (char *)malloc(sizeof(char) * (i + 2));
 	ft_strlcpy(prev, txt, i + 1);

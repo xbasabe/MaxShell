@@ -243,6 +243,7 @@ char	*expand_word(char *word);
 //t_flag_split
 int		cut_or_pass(char c, int *flag);
 char	**ft_flag_split(char const *s, char c);
+int		expand_or_not(char c, int *flag);
 
 //redirect
 void	redirections_stack(t_stack *stack);

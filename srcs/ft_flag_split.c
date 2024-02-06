@@ -6,6 +6,7 @@ int cut_or_pass(char c, int *flag);
 static char	**ft_split_add(const char *s, char **dst, size_t i, size_t len);
 char	**ft_flag_split(char const *s, char c);
 */
+//static ft_rm_quote_word(char *dst);
 
 static size_t	ft_flag_get_split_size(char const *s, char c)
 {
@@ -76,18 +77,26 @@ char	**ft_flag_split(char const *s, char c)
 
 int cut_or_pass(char c, int *flag) //int 0 pass int 1 cut
 {
-    
-    if(c == ' ' &&  flag[0] == 1 && flag[1] == 1) //es blank y no protegido (fuera comillas)
+    //printf("flag simples: %d\n", flag[0]);
+	//printf("flag dobles:  %d\n", flag[1]);
+    //  1 fuera, -1 dentro
+
+	if(c == ' ' &&  flag[0] == 1 && flag[1] == 1) //es blank y no protegido (fuera comillas)
         return(1);
-    if(c == '\'' && flag[0] == 1) //comillas simples fuera de dobles
-        flag[0] = flag[0] * -1;
-    if(c == '"' && flag[1] == 1) //comillas dobles fuera de simples
-        flag[1] = flag[1] * -1;
+    else if(c == '\'' && flag[1] == 1) //comillas simples fuera de dobles
+    {  
+		flag[0] = flag[0] * -1;
+
+	}
+    else if(c == '"' && flag[0] == 1) //comillas dobles fuera de simples
+	{
+		flag[1] = flag[1] * -1;
+	}	
     return(0); //por defecto dejamos pasar
 }
 
 /*
-ft_rm_quote_blank(char *dst) //quitar comillas no pretegidas (de apertura y cierre) usar la funcion de expandir $
+static ft_rm_quote_word(char *dst) //quitar comillas no pretegidas (de apertura y cierre) usar la funcion de expandir $
 {
     char    *clean;
     char    *temp;
@@ -98,7 +107,7 @@ ft_rm_quote_blank(char *dst) //quitar comillas no pretegidas (de apertura y cier
     flag[1] = 1;
 
     len = 0;
-    while( cut_or_pass(*dst, flag) == 0  && *dst && ++dst) //cut or pass 0, no protegida
+    while(expand_or_not(*dst, flag) == 0  && *dst && ++dst) // llegar a $ no protegida
         if(is blank or quote)
             len++; //ir avanzando
     llegamos a quote?
@@ -113,3 +122,51 @@ ft_rm_quote_blank(char *dst) //quitar comillas no pretegidas (de apertura y cier
         
 }
 */
+
+char	**ft_flag_expand(char const *s, char c) // c = '$'
+{
+	char	**dst;
+	size_t	len;
+	size_t	i;
+    int flag[2]; //[0] simples [1] dobles
+    
+    flag[0] = 1; // 1 fuera, -1 dentro
+    flag[1] = 1;
+	if (!s)
+		return (NULL);
+	dst = (char **)malloc(sizeof(char *) * (ft_flag_get_split_size(s, c) + 1));
+	if (!dst)
+		return (NULL);
+	i = 0;
+	while (*s)
+	{
+		len = 0;
+		//while (*s != c && *s && ++s)
+        while(expand_or_not(*s, flag) == 0  && *s && ++s)
+            len++;
+		if (len > 0)
+		{
+            dst = ft_flag_split_add(s, dst, i, len); //pone un espacioo de más al final?
+			i++;
+		}
+		while (*s == c && *s)
+			s++;
+	}
+	dst[i] = NULL;
+	return (dst);
+}
+
+int	expand_or_not(char c, int *flag)
+{
+	if(c == '$' &&  flag[0] == 1 && flag[1] == 1) // vble fuera comillas
+        return(1);
+    else if(c == '\'' && flag[1] == 1) //comillas simples fuera de dobles
+    {  
+		flag[0] = flag[0] * -1;
+	}
+    else if(c == '"' && flag[0] == 1) //comillas dobles fuera de simples
+	{
+		flag[1] = flag[1] * -1;
+	}	
+    return(0);
+}
